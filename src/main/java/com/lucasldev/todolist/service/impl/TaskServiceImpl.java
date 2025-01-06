@@ -11,10 +11,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-
     private final TaskRepository taskRepository;
 
     public TaskServiceImpl(TaskRepository taskRepository) {
@@ -57,8 +57,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> findByName(String name) {
-        // Finds tasks by title and throws exception if no tasks are found
-        List<Task> tasks = taskRepository.findByName(name).orElseGet(List::of);
+        // Converts the searched name to lowercase
+        String lowerCaseName = name.toLowerCase();
+
+        // Finds all tasks regardless of case sensitivity
+        List<Task> tasks = taskRepository.findAll().stream()
+                .filter(task -> task.getName().equalsIgnoreCase(lowerCaseName))
+                .collect(Collectors.toList());
+
         if (tasks.isEmpty()) {
             throw new TaskNotFoundException("No tasks found with name: " + name);
         }

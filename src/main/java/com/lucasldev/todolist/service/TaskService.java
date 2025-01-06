@@ -2,8 +2,6 @@ package com.lucasldev.todolist.service;
 
 import com.lucasldev.todolist.domain.model.Status;
 import com.lucasldev.todolist.domain.model.Task;
-
-import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskService {
